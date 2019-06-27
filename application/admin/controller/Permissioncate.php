@@ -32,7 +32,7 @@ class Permissioncate extends Common
             die;
         }
     	
-    	$arr=$rbac->getPermissionCategory([['status', '=', $data['name']]]);
+    	$arr=$rbac->getPermissionCategory([['name', '=', $data['name']]]);
     	if (empty($arr)) {
     	$rbac->savePermissionCategory([
 			'name' => $data['name'],
@@ -44,10 +44,14 @@ class Permissioncate extends Common
 		die;
     	}else{
     		$res=['code'=>'2','status'=>'error','data'=>'分类名不能重复'];
-			echo json_encode($res);
-			die;
+		echo json_encode($res);
+		die;
     	}
 		
+    }
+    public function p_delete(){
+    	$id=Request::post('id');
+    	Db::table('permission_category')->where('id',$id)->delete();
     }
     
 }

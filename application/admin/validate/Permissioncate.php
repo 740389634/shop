@@ -13,9 +13,9 @@ class Permissioncate extends Validate
      * @var array
      */	
 	protected $rule = [
-    'name'  => 'require|max:50|mall:1',
+    'name'  => 'require',
     
-    'description'   => 'number|max:200|mall:1',
+    'description'   => 'require',
     
 
     
@@ -28,12 +28,12 @@ class Permissioncate extends Validate
      * @var array
      */	
     protected $message = [
-        'name.require' => '名称必须',
-        'name.max'     => '名称最多不能超过50个字符',
-        'name.mall'     => '名称不能低于一个字符',
-        'description.number'   => '描述必须',
-        'description.max'  => '描述最多不能超过200个字符',
-        'description.mall'     => '描述不能低于一个字符',
+        'name.require' => '名称必须填写',
+        // 'name.max'     => '名称最多不能超过50个字符',
+        // 'name.mall'     => '名称不能低于一个字符',
+        'description.require'   => '描述必须填写',
+        // 'description.max'  => '描述最多不能超过200个字符',
+        // 'description.mall'     => '描述不能低于一个字符',
         
     ];
 }
