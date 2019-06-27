@@ -4,8 +4,41 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dd59a8b04e262e6a8352b99b1e0c5fa5",
+    "content-hash": "5eb017cf1e4063655cbe413b0b6685b1",
     "packages": [
+        {
+            "name": "gmars/tp5-rbac",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/gmars/tp5-rbac.git",
+                "reference": "907584a06d5ef62376a3cf11047030b542721258"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/gmars/tp5-rbac/zipball/907584a06d5ef62376a3cf11047030b542721258",
+                "reference": "907584a06d5ef62376a3cf11047030b542721258",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "gmars\\rbac\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "weiyongqiang",
+                    "email": "hayixia606@163.com"
+                }
+            ],
+            "description": "这个扩展是基于thinkPHP5框架的RBAC权限验证的扩展。使用本扩展能够快速的将RBAC权限控制器模块引入到自己的系统中。原则上本模块适合于任何PHP框架但是由于使用了thinkPHP5的特性所以使用composer安装到其他框架时需要做相应的修改。模块所需要的扩展库可以通过thinkPHP5的migration来做数据迁移。",
+            "time": "2019-04-20T10:42:21+00:00"
+        },
         {
             "name": "topthink/framework",
             "version": "v5.1.37.1",
@@ -141,7 +174,9 @@
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "gmars/tp5-rbac": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

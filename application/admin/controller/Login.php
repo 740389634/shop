@@ -28,10 +28,14 @@ class Login extends Controller
 			}else{
 				$arr=['code'=>'2','status'=>'ok','data'=>'登录成功'];
 				
-			echo Session::set('name',$name);
+			 Session::set('name',$name);
 			}
 		}
 		echo json_encode($arr);
+    }
+    public function loginout(){
+    	Session::delete('name');
+        $this->redirect('login/login');
     }
    
 }
