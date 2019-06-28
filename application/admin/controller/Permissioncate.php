@@ -8,9 +8,19 @@ use app\admin\model\Permissioncate as PermissioncateModel;
 class Permissioncate extends Common
 {
     public function index()
-    {
+	{	
+	
        return $this->fetch();
     }
+    public function admin(){
+    $id=Request::post('id');
+	$arr=Db::table('permission_category')->where('id',$id)->select();
+    $res=['code'=>'0','status'=>'ok','data'=>$arr];
+	echo json_encode($res);
+    
+    
+    }
+   
     public function show(){
 		$Permissioncate = new PermissioncateModel;
 		$obj=$Permissioncate->select();
@@ -52,6 +62,56 @@ class Permissioncate extends Common
     public function p_delete(){
     	$id=Request::post('id');
     	Db::table('permission_category')->where('id',$id)->delete();
+    	$res=['code'=>'1','status'=>'ok','data'=>'删除成功'];
+		echo json_encode($res);
     }
-    
+    public function p_update(){
+    	$rbac = new Rbac();
+    	$data=Request::post('');
+    	// $name=Request::post('name');
+    	// $description=Request::post('description');
+    	$validate = new \app\admin\validate\Permissioncate;
+    	if (!$validate->check($data)) {
+            $res=['code'=>'1','status'=>'error','data'=>$validate->getError()];
+            echo json_encode($res);
+            die;
+        }
+        $arr=$rbac->getPermissionCategory([['name', '=', $data['name']]]);
+        if (empty($arr)) {
+        	$sql=['name'=>$data['name'],'description'=>$data['description']];
+			$arr=Db::table('permission_category')->where('id',$data['id'])->update($sql);
+			$res=['code'=>'0','status'=>'ok','data'=>'修改成功'];
+			echo json_encode($res);
+			die;
+        }else{
+        	if ($arr[0]['id']!=$data['id']) {
+        		$res=['code'=>'2','status'=>'error','data'=>'分类名不能重复'];
+		    	echo json_encode($res);
+		    	die;
+        	}else{
+		    	$sql=['name'=>$data['name'],'description'=>$data['description']];
+				$arr=Db::table('permission_category')->where('id',$data['id'])->update($sql);
+				$res=['code'=>'3','status'=>'ok','data'=>'修改成功'];
+				echo json_encode($res);
+				die;
+        	}
+        	
+        }
+    }
+    public function batchUpdate(){
+    	$id=Request::post('id');
+    	if (empty($id)) {
+    		$res=['code'=>'0','status'=>'error','data'=>'不能为空'];
+		    echo json_encode($res);
+		    die;
+    	}
+    	$arr=explode(',', $id);
+    	array_shift($arr);
+    	
+    	$rbac = new Rbac();
+    	$rbac->delPermissionCategory($arr);
+    	$res=['code'=>'1','status'=>'ok','data'=>'删除成功'];
+		    echo json_encode($res);
+    	
+    }
 }
