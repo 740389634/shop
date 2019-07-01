@@ -21,7 +21,7 @@ class Login extends Controller
 			$arr=['code'=>'0','status'=>'error','data'=>'验证码错误'];
 			
 		}else{
-			$where=['user_name'=>$name,'password'=>$password];
+			$where=['user_name'=>$name,'password'=>md5($password)];
 			$sql=Db::table('user')->where($where)->select();
 			if (empty($sql)) {
 				$arr=['code'=>'1','status'=>'error','data'=>'用户名或者密码错误'];
@@ -37,5 +37,8 @@ class Login extends Controller
     	Session::delete('name');
         $this->redirect('login/login');
     }
-  	
+  	public function md5(){
+  		$ar=md5(123);
+  		echo $ar;
+  	}
 }
