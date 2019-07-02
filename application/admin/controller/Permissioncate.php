@@ -5,11 +5,14 @@ use think\Controller;
 use Request;
 use gmars\rbac\Rbac;
 use app\admin\model\Permissioncate as PermissioncateModel;
+use think\facade\Session;
 class Permissioncate extends Common
 {
     public function index()
 	{	
-	
+        $token=uniqid();
+	   Session::set('token',$token);
+       $this->assign('token',$token);
        return $this->fetch();
     }
     public function admin(){
@@ -61,8 +64,17 @@ class Permissioncate extends Common
     }
     public function p_delete(){
     	$id=Request::post('id');
+        $stoken=Request::post('token');
+        $session_token=Session::get('token');
+        $token=uniqid();
+        Session::set('token',$token);
+        if ($stoken!=$session_token) {
+            $res=['code'=>'0','status'=>'error','data'=>'令牌不匹配','token'=>$token];
+            echo json_encode($res);
+            die;
+        }
     	Db::table('permission_category')->where('id',$id)->delete();
-    	$res=['code'=>'1','status'=>'ok','data'=>'删除成功'];
+    	$res=['code'=>'1','status'=>'ok','data'=>'删除成功','token'=>$token];
 		echo json_encode($res);
     }
     public function p_update(){
@@ -113,5 +125,30 @@ class Permissioncate extends Common
     	$res=['code'=>'1','status'=>'ok','data'=>'删除成功'];
 		    echo json_encode($res);
     	
+    }
+    public function bothUpdate(){
+        $rbac = new Rbac();
+        $data=Request::post('');
+           $arr=$rbac->getPermissionCategory([['name', '=', $data['name']]]);
+        if (empty($arr)) {
+            $sql=['name'=>$data['name']];
+            $arr=Db::table('permission_category')->where('id',$data['id'])->update($sql);
+            $res=['code'=>'0','status'=>'ok','data'=>'修改成功'];
+            echo json_encode($res);
+            die;
+        }else{
+            if ($arr[0]['id']!=$data['id']) {
+                $res=['code'=>'2','status'=>'error','data'=>'分类名不能重复'];
+                echo json_encode($res);
+                die;
+            }else{
+                $sql=['name'=>$data['name']];
+                $arr=Db::table('permission_category')->where('id',$data['id'])->update($sql);
+                $res=['code'=>'3','status'=>'ok','data'=>'修改成功'];
+                echo json_encode($res);
+                die;
+            }
+            
+        }
     }
 }

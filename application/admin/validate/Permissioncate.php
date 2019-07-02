@@ -13,7 +13,7 @@ class Permissioncate extends Validate
      * @var array
      */	
 	protected $rule = [
-    'name'  => 'require',
+    'name'  => 'require|token',
     
     'description'   => 'require',
     

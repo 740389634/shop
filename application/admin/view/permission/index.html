@@ -16,28 +16,26 @@
 				<form class="Huiform" method="post" action="" target="_self">
 					<input type="text" placeholder="名称" value="" class="input-text" style="width:120px" id="name">
           <input type="text" placeholder="描述" value="" class="input-text" style="width:120px" id="description">
-          <input hidden="" type="text" name="__token__" id="__token__" value="{$Request.token}" />
+          
             
           
 					 <button type="button" class="btn btn-success" id="add" name="" onClick=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
            <span id="span"></span>
 				</form>
 			</div>
-			<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a></span>
-        <span id="token" hidden="">{$token}</span>
-       <span class="r">共有数据：<strong>54</strong> 条</span> </div>
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
 			<div class="mt-10">
 				<table class="table table-border table-bordered table-bg table-sort">
 					<thead>
-						<tr class="text-c">
-							<th width="25"><input type="checkbox" name="" value=""></th>
-							<th width="70">ID</th>
-							
-							<th width="200">名称</th>
-							<th width="120">描述</th>
-							
-							<th width="100">操作</th>
-						</tr>
+						< <tr class="text-c">
+              <th width="25"><input type="checkbox" name="" value=""></th>
+              <th width="70">ID</th>
+              <!-- <th width="80">排序</th> -->
+              <th width="200">品牌名称</th>
+              <th width="120">品牌分类名称</th>
+              
+              <th width="100">操作</th>
+            </tr>
 					</thead>
 					<tbody>
 						<!-- <tr class='text-c'>
@@ -94,13 +92,11 @@
     $("#add").click(function(){
       var name=$('#name').val()
       var description=$('#description').val()
-      var __token__=$('#__token__').val()
       $.ajax({
-        url:"{:url('permissioncate/addAction')}",
+        url:"{:url('permission/addAction')}",
         data:{
           name:name,
-          description:description,
-          __token__:__token__
+          description:description
         },
         dataType:'json',
         type:'post',
@@ -134,25 +130,15 @@
               $('#span').html('')
              }, 3000);
             show()
-            comtoken()
           }
         }
       })
     });
     //管理员分类展示
-     function comtoken(){
-      $.ajax({
-        url:"{:url('common/commonToken')}",
-        dataType:'json',
-        success:function(result){
-          console.log(result)
-          $("#__token__").val(result.token)
-        }
-      })
-     }
     function show(){
+    
     $.ajax({
-      url:"{:url('permissioncate/show')}",
+      url:"{:url('permission/show')}",
       dataType:'json',
       success:function(result){
         
@@ -161,7 +147,7 @@
         var tr='';
         for (var i = 0; i < data.length; i++) {
           
-          tr=tr+"<tr class='text-c'><td><input name='' class='mycheckbox' type='checkbox' value='"+data[i].id+"'></td><td>"+data[i].id+"</td><td class='text-l' tid='"+data[i].id+"' tname='"+data[i].name+"'><span class='uname'>"+data[i].name+"</span></td><td class='text-l'>"+data[i].description+"</td><td class='f-14 product-brand-manage'><a style='text-decoration:none'  onClick='modaldemo("+data[i].id+")' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a style='text-decoration:none' class='ml-5' onclick='admin_role_del(this,"+data[i].id+")' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+          tr=tr+"<tr class='text-c'><td><input name='' type='checkbox' value=''></td><td>"+data[i].id+"</td><td class='text-l'>"+data[i].name+"</td><td class='text-l'>"+data[i].pc_name+"</td><td class='f-14 product-brand-manage'><a style='text-decoration:none' onClick='' href='{:url('permission/pe_update')}?id="+data[i].id+"' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a style='text-decoration:none' class='ml-5' onClick='pc_delete("+data[i].id+")' href='' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
         }
         $(".table tbody").html(tr);
        }
@@ -176,43 +162,29 @@
       $(document).on("click",".uname",function(){
         // console.log(this)
         var name = $(this).text()
-        var id = $(this).parent().attr("tid")
-        
-        var input = "<input class='classname' type='text' value='"+name+"'/>"
+        // console.log(name)
+        var input = "<input class='classname' type='text' value'"+name+"'/>"
         $(this).parent().html(input)
        
-      
-      $(document).on("blur",".classname",function(){
-       
-        var name = $(this).val()
-        var input = "<input  type='text' value='"+name+"'/>"
-        $(this).parent().html(input)
-        
-        
-         $.ajax({
-        url:"{:url('permissioncate/bothUpdate')}",
-        data:{
-          id:id,
-          name:name
-        },
-        type:'post',
-        dataType:'json',
-        success:function(result){
-          if (result.status=='ok') {
-            show()
-          }
-          
-        }
-      })
       });
+      $(document).on("blur",".classname",function(){
+        var id = $(this).parent().attr('tid')
+        var name = $(this).val()
+        // var description =$(this).parent().next().html()
+        console.log(id)
+        console.log(name)
+        // console.log(description)
+        // var span= "<span class='uname'>"+name+"</span>"
+        // console.log(span)
+         // $(this).parent().html(sapn)
+
       });
     });  
     //弹出层默认值
     function modaldemo(id){ 
       $("#modal-demo").modal("show")
-       
       $.ajax({
-        url:"{:url('permissioncate/admin')}",
+        url:"{:url('permission/admin')}",
         data:{
           id:id,
          
@@ -234,14 +206,12 @@
       var id=$('#p_id').val()
       var name=$('#p_name').val()
       var description=$('#p_description').val()
-      var __token__=$('#__token__').val()
       $.ajax({
-        url:"{:url('permissioncate/p_update')}",
+        url:"{:url('permission/p_update')}",
         data:{
           id:id,
           name:name,
           description:description,
-          __token__:__token__
         },
         type:'post',
         dataType:'json',
@@ -268,7 +238,6 @@
              }, 3000);
              $("#modal-demo").modal("hide")
              show()
-             comtoken()
           }
           if (result.code=='3') {
             $('#s_span').html(result.data)
@@ -278,19 +247,16 @@
              }, 3000);
              $("#modal-demo").modal("hide")
              show()
-             comtoken()
           }
         }
       })
     }
     //单个删除
     function admin_role_del(obj,id){
-      var token=$("#token").html()
       layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
         $.ajax({
-          url:"{:url('permissioncate/p_delete')}",
+          url:"{:url('permission/p_delete')}",
           data:{
-            token:token,
              id:id
            },
           type:'post',
@@ -299,10 +265,8 @@
             if (result.code=='1') {
               $(obj).parents("tr").remove();
               layer.msg(result.data,{icon:1,time:1000});
-              $('#token').html(result.token)
               show()
             }
-
           }
         }) 
       });     
@@ -311,18 +275,16 @@
   function datadel(obj){
     layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
       //此处请求后台程序，下方是成功后的前台处理……
-      // var token=$('#token').html()
        var box=$(".mycheckbox:checked")
-       var __token__=$('#__token__').val()
+       console.log(box)
         var id=''
         for (var i = 0; i < box.length; i++) {
           id=id+','+box[i].value
         }
         $.ajax({
-          url:"{:url('permissioncate/batchUpdate')}",
+          url:"{:url('permission/batchUpdate')}",
           data:{
             id:id,
-             __token__:__token__
           },
           type:'post',
           dataType:'json',
@@ -335,7 +297,6 @@
               $(obj).parents("tr").remove();
               layer.msg(result.data,{icon:1,time:1000});
               show()
-              comtoken()
             } 
           }
         })
