@@ -13,25 +13,9 @@
 	<div class="Hui-article">
 		<article class="cl pd-20">
 			<div>
-				<form class="Huiform" method="post" action="" target="_self">
-				  <input type="text" placeholder="名称" value="" class="input-text" style="width:120px" id="name" >
-         
-            
-            <input type="text" placeholder="描述" value="" class="input-text" style="width:120px" id="description">
-        
-            
-            <input type="text" placeholder="路径" value="" class="input-text" style="width:120px" id="path">
-          
-           
-              
-              <select  id="cateid">
-                {volist name="arr" id="vo"}
-                <option value="{$vo.id}">{$vo.name}</option>
-                 {/volist}
-              </select>
-           
+				<form class="Huiform" method="post" action="" target="_self"> 
           <input hidden="" type="text" name="__token__" id="__token__" value="{$Request.token}" />
-					 <button onClick="addaction()" type="button" class="btn btn-success" id="add" name="" onClick=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+					 <a href="{:url('role/add')}"><button  type="button" class="btn btn-success" id="add" name="" onClick=""><i class="Hui-iconfont">&#xe600;</i> 添加</button></a>
             <span id="s_span"></span>
 				</form>
 			</div>
@@ -200,8 +184,8 @@
     $("#pname").val(name)
     $("#pdescription").val(description)
     $("#ppath").val(path)
-    var id=$("#pcategory_id1").val(pc_id)
-    console.log(id)
+    $("#pcategory_id1").val(pc_id)
+  
   }
   function pu_update(){
 
@@ -276,7 +260,7 @@
       var id=$('#pcategory_id1').val()
      
       $.ajax({
-        url:"{:url('permissioncate/show')}",
+        url:"{:url('permission/show')}",
         dataType:'json',
         success:function(result){
          
@@ -284,11 +268,11 @@
 
           var option='';
                 for (var i=0; i<data.length;i++){
-                  if (id==data[i]['id']) {
+                  if (id==data[i]['pc_id']) {
 
-                     option=option+"<option  value="+data[i]['id']+"selected>"+data[i]['name']+"</option>"
+                     option=option+"<option  value="+data[i]['pc_id']+"selected>"+data[i]['pc_name']+"</option>"
                    }else{
-                    option=option+"<option  value="+data[i]['id']+">"+data[i]['name']+"</option>"
+                    option=option+"<option  value="+data[i]['pc_id']+">"+data[i]['pc_name']+"</option>"
                    }
                   // console.log(data[i]['id'])
                 }
