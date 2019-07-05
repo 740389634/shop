@@ -6,7 +6,7 @@
 
 
 <section class="Hui-article-box">
-	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员 <span class="c-gray en">&gt;</span> 管理员分类列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员 <span class="c-gray en">&gt;</span> 角色管理 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
  
     
 
@@ -14,9 +14,9 @@
 		<article class="cl pd-20">
 			<div>
 				<form class="Huiform" method="post" action="" target="_self"> 
-          <input hidden="" type="text" name="__token__" id="__token__" value="{$Request.token}" />
+         
 					 <a href="{:url('role/add')}"><button  type="button" class="btn btn-success" id="add" name="" onClick=""><i class="Hui-iconfont">&#xe600;</i> 添加</button></a>
-            <span id="s_span"></span>
+            
 				</form>
 			</div>
 			<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"><a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a></span> <span class="r">共有数据：<strong>54</strong> 条</span> </div>
@@ -29,8 +29,7 @@
               <!-- <th width="80">排序</th> -->
               <th width="200">权限名称</th>
               <th width="120">权限描述</th>
-              <th width="200">权限路径</th>
-              <th width="120">权限分类</th>
+             
               
               <th width="100">操作</th>
             </tr>
@@ -56,31 +55,24 @@
       <div class="modal-dialog">
         <div class="modal-content radius">
           <div class="modal-header">
-          <input type="text" placeholder="id" value="" class="input-text" style="width:120px" id="pid" hidden="">
+          <input type="text" placeholder="id" value="" class="input-text" style="width:120px" id="id" hidden="">
           </div>
           
-          <div class="modal-header">
-           <input type="text" placeholder="名称" value="" class="input-text" style="width:120px" id="pname" >
-          </div>
-          <div class="modal-header">
-            <input type="text" placeholder="描述" value="" class="input-text" style="width:120px" id="pdescription">
-          </div>
-            <div class="modal-header">
-            <input type="text" placeholder="路径" value="" class="input-text" style="width:200px" id="ppath">
-          </div>
-          <div class="modal-header">
-            <select id="pcategory_id1">
-              
-            </select>
-
-            </div>
-            <div>
+          
+           <input type="text" placeholder="名称" value="" class="input-text" style="width:120px" id="name" >
+            <input type="text" placeholder="描述" value="" class="input-text" style="width:120px" id="description">
+             <input  type="text" name="__token__" id="__token__" value="{$Request.token}" />
               <span id=span"></span>
+             
+              <div class="row cl">
+               <!--  <label class="form-label col-xs-4 col-sm-3">网站角色：</label> -->
+                <div class="formControls col-xs-8 col-">
+                  <dl class="permission-list" id="permission-list">
+                    
+                  </dl>
+                </div>
             </div>
-              
-            <div class="modal-header">
-          
-            </div>
+        
             <a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
         <div class="modal-footer">
           <button class="btn btn-primary" onclick="pu_update()">确定</button>
@@ -96,55 +88,6 @@
 <!--_footer 作为公共模版分离出去--> 
 {include file="footer"/}
 <script type="text/javascript">
-  //权限添加
-  
-    //权限添加
-    function addaction(){
-      var name=$('#name').val()
-      var description=$('#description').val()
-      var path=$('#path').val()
-      var cateid=$('#cateid').val()
-      var __token__=$('#__token__').val()
-      $.ajax({
-        url:"{:url('permission/addaction')}",
-        data:{
-          name:name,
-          description:description,
-          path:path,
-          cateid:cateid,
-          __token__:__token__
-        },
-        type:'post',
-        dataType:'json',
-        success:function(result){
-          if (result.code=='1') {
-            $('#s_span').html(result.data)
-            $('#s_span').css('color','red')
-            setTimeout(function(){ 
-              $('#s_span').html('')
-             }, 3000);
-            comtoken()
-          }
-          if (result.code=='2') {
-            $('#s_span').html(result.data)
-            $('#s_span').css('color','red')
-            setTimeout(function(){ 
-              $('#s_span').html('')
-             }, 3000);
-            comtoken()
-          }
-          if (result.code=='0') {
-            $("#modal-demo").modal("hide")
-            $('#name').val('')
-            $('#description').val('')
-            $('#path').val('')
-            show()
-            comtoken()
-
-          }
-        }
-      })
-    }
      function comtoken(){
       $.ajax({
         url:"{:url('common/commonToken')}",
@@ -159,7 +102,7 @@
     //权限展示
     function show(){
     $.ajax({
-      url:"{:url('permission/show')}",
+      url:"{:url('role/show')}",
       dataType:'json',
       success:function(result){
         
@@ -168,7 +111,7 @@
         var tr='';
         for (var i = 0; i < data.length; i++) {
           
-          tr=tr+"<tr class='text-c'><td><input name='' class='mycheckbox' type='checkbox' value='"+data[i].id+"'></td><td>"+data[i].id+"</td><td class='text-l'>"+data[i].name+"</td><td class='text-l'>"+data[i].description+"</td><td class='text-l'>"+data[i].path+"</td><td class='text-l'>"+data[i].pc_name+"</td><td class='f-14 product-brand-manage'><a style='text-decoration:none' onclick='modaldemo("+data[i].id+",\""+data[i].name+"\",\""+data[i].description+"\",\""+data[i].path+"\","+data[i].pc_id+")' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a style='text-decoration:none' class='ml-5' onclick='pc_delete("+data[i].id+")'  title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
+          tr=tr+"<tr class='text-c'><td><input name='' class='mycheckbox' type='checkbox' value='"+data[i].id+"'></td><td>"+data[i].id+"</td><td class='text-l'>"+data[i].name+"</td><td class='text-l'>"+data[i].description+"</td><td class='f-14 product-brand-manage'><a style='text-decoration:none' onclick='modaldemo("+data[i].id+",\""+data[i].name+"\",\""+data[i].description+"\")' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a style='text-decoration:none' class='ml-5' onclick='pc_delete("+data[i].id+")'  title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td></tr>"
         }
         $(".table tbody").html(tr);
        }
@@ -176,114 +119,100 @@
     });
   }
   show()
-  //权限修改
-  function modaldemo(id,name,description,path,pc_id){
+  
+  function modaldemo(id,name,description){
    
     $("#modal-demo").modal("show")
-    $("#pid").val(id)
-    $("#pname").val(name)
-    $("#pdescription").val(description)
-    $("#ppath").val(path)
-    $("#pcategory_id1").val(pc_id)
-  
+    $("#id").val(id)
+    $("#name").val(name)
+    $("#description").val(description)
+     $.ajax({
+      url:"{:url('role/roleshow')}",
+      data:{
+        id:id
+      },
+      dataType:'json',
+      success:function(result){
+        console.log(result.data)
+        var data=result.data
+        dl=''
+        $.each(data,function( key ,value ){
+          dl=dl+" <dt><label class=''><input type='checkbox' value='' name='user-Character-0-0' id='user-Character-0-0'>"+key+"</label></dt><dd>"
+          $.each(value,function( key1 ,value1 ){
+            dl=dl+" <label class=''><input type='checkbox' id='p"+value1['id']+"' class='mycheckbox' value='"+value1['id']+"' name='user-Character-0-0-0' id='user-Character-0-0-4'>"+value1['name']+"</label>"
+          })
+          dl=dl+"</dd>";
+        })
+        $('#permission-list').html(dl)
+         $.each(result.code,function(key ,value){
+          var id=value['permission_id']
+          var pid='p'+id
+          $('#'+pid).prop('checked',true)
+        })
+      }
+    })
   }
-  function pu_update(){
-
-    var id=$('#pid').val()
-    var name=$('#pname').val()
-    var description=$('#pdescription').val()
-    var path=$('#ppath').val()
-    var category_id=$('#pcategory_id1').val()
-    var __token__=$('#__token__').val()
+  function pc_delete(id){
+   
+    console.log(id)
     $.ajax({
-      url:"{:url('permission/pu_update')}",
+      url:"{:url('role/pc_delete')}",
+      data:{
+        id:id
+      },
+      dataType:'json',
+      success:function(result){
+         console.log(result)
+      }
+    })
+      show()
+  }
+
+
+  function pu_update(){
+    var id =$('#id').val()
+    var name =$('#name').val()
+    var description =$('#description').val()
+    var __token__ =$('#__token__').val()
+    var mycheckbox=$(".mycheckbox:checked")
+    var permission_id=''
+          for (var i = 0; i < mycheckbox.length; i++) {
+            permission_id=permission_id+','+mycheckbox[i].value   
+          }
+    $.ajax({
+      url:"{:url('role/permission_show')}",
       data:{
         id:id,
         name:name,
         description:description,
-        path:path,
-        category_id:category_id,
+        permission_id:permission_id,
         __token__:__token__
       },
       type:'post',
       dataType:'json',
       success:function(result){
-       if (result.code=='0') {
-          
-          $("#modal-demo").modal("hide")
-          show()
-          comtoken()
-          
-       }
-        if (result.code=='1') {
-          $("#modal-demo").modal("hide")
-          show()
-          comtoken()
-        }
+
         if (result.code=='2') {
           $('#span').html(result.data)
           $('#span').css('color','red')
           comtoken()
         }
-        if (result.code=='3') {
+        if (result.code=='0') {
           $('#span').html(result.data)
           $('#span').css('color','red')
-          
+           $("#modal-demo").modal("hide")
+          comtoken()
+          show()
+        }
+         if (result.code=='1') {
+          $('#span').html(result.data)
+          $('#span').css('color','red')
           comtoken()
         }
         console.log(result)
       }
     })
-
   }
-  //删除
-    function pc_delete(id){
-      var __token__=$('#__token__').val()
-      $.ajax({
-        url:"{:url('permission/pc_delete')}",
-        data:{
-          id:id,
-          __token__:__token__
-        },
-        type:'post',
-        dataType:'json',
-        success:function(result){
-          if (result.code=='0') {
-              show()
-              comtoken()
-
-          }
-        }
-      })
-    }
-    function perissioncate(){
-      var id=$('#pcategory_id1').val()
-     
-      $.ajax({
-        url:"{:url('permission/show')}",
-        dataType:'json',
-        success:function(result){
-         
-          var data=result.data
-
-          var option='';
-                for (var i=0; i<data.length;i++){
-                  if (id==data[i]['pc_id']) {
-
-                     option=option+"<option  value="+data[i]['pc_id']+"selected>"+data[i]['pc_name']+"</option>"
-                   }else{
-                    option=option+"<option  value="+data[i]['pc_id']+">"+data[i]['pc_name']+"</option>"
-                   }
-                  // console.log(data[i]['id'])
-                }
-                $("#pcategory_id1").html(option);    
-        }
-      })
-
-    }
-    perissioncate()
-  
-    //批量删除
   function datadel(obj){
     layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
       //此处请求后台程序，下方是成功后的前台处理……
@@ -295,7 +224,7 @@
           id=id+','+box[i].value
         }
         $.ajax({
-          url:"{:url('permission/batchUpdate')}",
+          url:"{:url('role/batchUpdate')}",
           data:{
             id:id,
              __token__:__token__
@@ -317,5 +246,14 @@
         })
     });
   }
-
+    function comtoken(){
+      $.ajax({
+        url:"{:url('common/commonToken')}",
+        dataType:'json',
+        success:function(result){
+          console.log(result)
+          $("#__token__").val(result.token)
+        }
+      })
+    }
 </script>

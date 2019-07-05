@@ -1,71 +1,42 @@
 {include file="header"/}
 <body>
 <article class="page-container">
-	<form action="" method="post" class="form form-horizontal" id="form-admin-role-add">
+	<form method=""  class="form form-horizontal" id="form-admin-role-add">
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="roleName" name="roleName" datatype="*4-16" nullmsg="用户账户不能为空">
+				<input type="text" class="input-text" value="" placeholder="" id="name" name="roleName" datatype="*4-16" nullmsg="用户账户不能为空">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">备注：</label>
 			<div class="formControls col-xs-8 col-sm-9">
-				<input type="text" class="input-text" value="" placeholder="" id="" name="">
+				<input type="text" id="description" class="input-text"  value="" placeholder=""  name="">
 			</div>
 		</div>
 		<div class="row cl">
 			<label class="form-label col-xs-4 col-sm-3">网站角色：</label>
 			<div class="formControls col-xs-8 col-sm-9">
 				<dl class="permission-list" id="permission-list">
-				<!-- 	<dt>
-						<label>
-							<input type="checkbox" value="" name="user-Character-0" id="user-Character-0">
-							资讯管理</label>
-					</dt>
-					<dd>
-						<dl class="cl permission-list2" >
-							<dt>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0" id="user-Character-0-0">
-									栏目管理</label>
-							</dt> -->
-						<!-- 	<dd>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-0">
-									添加</label>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-1">
-									修改</label>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-2">
-									删除</label>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-3">
-									查看</label>
-								<label class="">
-									<input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-4">
-									审核</label>
-								<label class="c-orange"><input type="checkbox" value="" name="user-Character-0-0-0" id="user-Character-0-0-5"> 只能操作自己发布的</label>
-							</dd> -->
-						</dl>
-					</dd>
+					
 				</dl>
 			</div>
 		</div>
+		
 		<div class="row cl">
 			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
-				<button type="submit" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+
+				<button onclick="addaction()" type="button" class="btn btn-success radius" id="admin-role-save" name="admin-role-save"><i class="icon-ok"></i> 确定</button>
+				<input  type="text" hidden="" name="__token__" id="__token__" value="{$Request.token}" />
+				<span id="span"></span>
 			</div>
 		</div>
 	</form>
 </article>
+<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 
-{include file="footer"/}
-
-<!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript">
-	
+	function show(){
 		$.ajax({
 			url:"{:url('role/roleshow')}",
 			dataType:'json',
@@ -75,15 +46,77 @@
 				$.each(data,function( key ,value ){
 					dl=dl+"	<dt><label class=''><input type='checkbox' value='' name='user-Character-0-0' id='user-Character-0-0'>"+key+"</label></dt><dd>"
 					$.each(value,function( key1 ,value1 ){
-						dl=dl+"	<label class=''><input type='checkbox' value='' name='user-Character-0-0-0' id='user-Character-0-0-4'>"+value1['name']+"</label>"
+						dl=dl+"	<label class=''><input type='checkbox' class='mycheckbox' value='"+value1['id']+"' name='user-Character-0-0-0' id='user-Character-0-0-4'>"+value1['name']+"</label>"
 					})
 					dl=dl+"</dd>";
-					console.log(dl)
 					$('#permission-list').html(dl)
+
 				})
 				
 			}
 		})
-	
+	}
+	show()
+		function addaction(){
+			
+			var name=$('#name').val()
+			var description=$('#description').val()
+			var __token__=$('#__token__').val()
+			var mycheckbox=$(".mycheckbox:checked")
+			var permission_id=''
+			    for (var i = 0; i < mycheckbox.length; i++) {
+			    	permission_id=permission_id+','+mycheckbox[i].value   
+        	}
+        	$.ajax({
+        		url:"{:url('role/addaction')}",
+        		data:{
+        			name:name,
+        			description:description,
+        			permission_id:permission_id,
+        			__token__:__token__
+        		},
+        		 type:'post',
+        		dataType:'json',
+        		success:function(result){
+        			if (result.code=='0') {
+        				$('#span').html(result.data)
+        				$('#span').css('color','red')
+        				comtoken()
+        				location.href="{:url('role/index')}"
+        			}
+        			if (result.code=='2') {
+        				$('#span').html(result.data)
+        				$('#span').css('color','red')
+        				 setTimeout(function(){ 
+              				$('#span').html('')
+             			}, 3000);
+        				comtoken()
+        			}
+        			if (result.code=='1') {
+        				$('#span').html(result.data)
+        				$('#span').css('color','red')
+        				setTimeout(function(){ 
+              				$('#span').html('')
+             			}, 3000);
+        				comtoken()
+        			}
+        			console.log(result)
+        		}
+        	})
+
+		}
+	function comtoken(){
+      $.ajax({
+        url:"{:url('common/commonToken')}",
+        dataType:'json',
+        success:function(result){
+          console.log(result)
+          $("#__token__").val(result.token)
+        }
+      })
+    }
 </script>
+{include file="footer"/}
 <!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>
