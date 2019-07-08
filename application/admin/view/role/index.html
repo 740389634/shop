@@ -23,7 +23,7 @@
 			<div class="mt-10">
 				<table class="table table-border table-bordered table-bg table-sort">
 					<thead>
-						< <tr class="text-c">
+						 <tr class="text-c">
               <th width="25"><input type="checkbox" name="" value=""></th>
               <th width="70">ID</th>
               <!-- <th width="80">排序</th> -->
@@ -61,7 +61,7 @@
           
            <input type="text" placeholder="名称" value="" class="input-text" style="width:120px" id="name" >
             <input type="text" placeholder="描述" value="" class="input-text" style="width:120px" id="description">
-             <input  type="text" name="__token__" id="__token__" value="{$Request.token}" />
+             <input  type="text" hidden="" name="__token__" id="__token__" value="{$Request.token}" />
               <span id=span"></span>
              
               <div class="row cl">
@@ -156,7 +156,7 @@
    
     console.log(id)
     $.ajax({
-      url:"{:url('role/pc_delete')}",
+      url:"{:url('role/delete')}",
       data:{
         id:id
       },
@@ -180,7 +180,7 @@
             permission_id=permission_id+','+mycheckbox[i].value   
           }
     $.ajax({
-      url:"{:url('role/permission_show')}",
+      url:"{:url('role/update')}",
       data:{
         id:id,
         name:name,

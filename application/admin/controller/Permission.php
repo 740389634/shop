@@ -57,7 +57,7 @@ class Permission extends Common
       }
   }
   //删除
-  public function pc_delete(){
+  public function delete(){
     $id=Request::post('id');
     Db::table('permission')->where('id',$id)->delete();
     $res=['code'=>'0','status'=>'ok','data'=>'删除成功'];
@@ -81,7 +81,7 @@ class Permission extends Common
       
     }
     //修改
-    public function pu_update(){
+    public function update(){
       $data=Request::post('');
       $validate = new \app\admin\validate\Permission;
         if (!$validate->check($data)) {

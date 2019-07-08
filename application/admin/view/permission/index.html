@@ -39,7 +39,7 @@
 			<div class="mt-10">
 				<table class="table table-border table-bordered table-bg table-sort">
 					<thead>
-						< <tr class="text-c">
+						<tr class="text-c">
               <th width="25"><input type="checkbox" name="" value=""></th>
               <th width="70">ID</th>
               <!-- <th width="80">排序</th> -->
@@ -212,7 +212,7 @@
     var category_id=$('#pcategory_id1').val()
     var __token__=$('#__token__').val()
     $.ajax({
-      url:"{:url('permission/pu_update')}",
+      url:"{:url('permission/update')}",
       data:{
         id:id,
         name:name,
@@ -256,7 +256,7 @@
     function pc_delete(id){
       var __token__=$('#__token__').val()
       $.ajax({
-        url:"{:url('permission/pc_delete')}",
+        url:"{:url('permission/delete')}",
         data:{
           id:id,
           __token__:__token__

@@ -62,7 +62,7 @@ class Permissioncate extends Common
     	}
 		
     }
-    public function p_delete(){
+    public function delete(){
     	$id=Request::post('id');
         $stoken=Request::post('token');
         $session_token=Session::get('token');
@@ -77,7 +77,7 @@ class Permissioncate extends Common
     	$res=['code'=>'1','status'=>'ok','data'=>'删除成功','token'=>$token];
 		echo json_encode($res);
     }
-    public function p_update(){
+    public function update(){
     	$rbac = new Rbac();
     	$data=Request::post('');
     	// $name=Request::post('name');

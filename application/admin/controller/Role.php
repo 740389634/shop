@@ -39,7 +39,7 @@ class Role extends Common
 
   		echo $json=json_encode($res);
   }
-  public function permission_show(){
+  public function update(){
 
   		$id=Request::post('id');
   		$name=Request::post('name');
@@ -113,7 +113,7 @@ class Role extends Common
   			echo $json=json_encode($res);
 		}
     }
-    function pc_delete(){
+    function delete(){
     	$id=Request::get('id');
     	$arr=Db::query("delete from role where id='$id'");
       $arr=Db::query("delete from role_permission where role_id='$id'");

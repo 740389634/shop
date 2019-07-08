@@ -123,13 +123,13 @@ class User extends Common
         echo $json=json_encode($res);
       }
     }
-    function pc_delete(){
-    	$id=Request::get('id');
-    	$arr=Db::query("delete from role where id='$id'");
-    	$res=['code'=>'0','status'=>'ok','data'=>'删除成功'];
-  		echo $json=json_encode($res);
-    }
-    function pu_update(){
+    // function pc_delete(){
+    // 	$id=Request::get('id');
+    // 	$arr=Db::query("delete from role where id='$id'");
+    // 	$res=['code'=>'0','status'=>'ok','data'=>'删除成功'];
+  		// echo $json=json_encode($res);
+    // }
+    function update(){
        $data=Request::post('');
       $id=Request::post('id');
       $user_name=Request::post('user_name');
@@ -169,7 +169,7 @@ class User extends Common
       $json=json_encode($res);
        echo $json;
     }
-    function user_delete(){
+    function delete(){
       $id=Request::get('id');
       $arr=Db::query("delete from user where id='$id'");
       $arr=Db::query("delete from user_role where user_id='$id'");

@@ -236,7 +236,7 @@
       var description=$('#p_description').val()
       var __token__=$('#__token__').val()
       $.ajax({
-        url:"{:url('permissioncate/p_update')}",
+        url:"{:url('permissioncate/update')}",
         data:{
           id:id,
           name:name,
@@ -288,7 +288,7 @@
       var token=$("#token").html()
       layer.confirm('角色删除须谨慎，确认要删除吗？',function(index){
         $.ajax({
-          url:"{:url('permissioncate/p_delete')}",
+          url:"{:url('permissioncate/delete')}",
           data:{
             token:token,
              id:id

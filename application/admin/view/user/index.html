@@ -161,7 +161,7 @@
    
     console.log(id)
     $.ajax({
-      url:"{:url('user/user_delete')}",
+      url:"{:url('user/delete')}",
       data:{
         id:id
       },
@@ -180,7 +180,7 @@
     var r_name=$('#r_name').val()
     var __token__ =$('#__token__').val()
     $.ajax({
-      url:"{:url('user/pu_update')}",
+      url:"{:url('user/update')}",
       data:{
         id:id,
         user_name:user_name,
