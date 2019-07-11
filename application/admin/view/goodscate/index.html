@@ -1,0 +1,173 @@
+{include file="header"/}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页  <span class="c-gray en">&gt;</span> 商品分类 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+        <article class="cl pd-20" >
+        <div>
+                <form class="Huiform" method="post" action="" target="_self">
+                    <span  id="pid" value="0">一级分类</span>
+                    的子类
+                  <input type="text" placeholder="名称" value="" class="input-text" style="width:120px" id="brand_name" >
+         
+                     <button  type="button" class="btn btn-success" id="add" name="" onClick=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+                     <span id="span"></span>
+            
+             <input hidden="" type="text" name="__token__" id="__token__" value="{$Request.token}" />
+                </form>
+            </div>
+        
+        
+            <div id="tree"></div>
+
+        </article>
+	</div>
+    <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content radius">
+          <div class="modal-header">
+            <input type="text" placeholder="id" value="" class="input-text" style="width:120px" id="id" hidden="">
+          </div>
+            <div class="modal-header">
+            <input type="text" placeholder="分类" value="" class="input-text" style="width:200px" id="name">
+          </div>
+          
+          <div class="modal-footer">
+            <button class="btn btn-primary" onclick="my_update()">确定</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">关闭</button>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+	
+
+<!--_footer 作为公共模版分离出去--> 
+{include file="footer"/}
+<script type="text/javascript">
+  function modaldemo(id,name){
+    $("#modal-demo").modal("show")
+    $('#id').val(id)
+    $('#name').val(name)
+  }
+  function my_update(){
+    var id=$('#id').val()
+    var name=$('#name').val()
+    var __token__=$('#__token__').val()
+    $.ajax({
+         url:"{:url('goodscate/update')}",
+          data:{
+            id:id,
+            name:name,
+             __token__:__token__
+          },
+          type:'post',
+          dataType:'json',
+          success:function(result){
+            if (result.status=='ok') {
+              show()
+              comtoken()
+              $("#modal-demo").modal("hide")
+
+            }
+            if (result.status=='error') {
+              alert(result.data)
+              comtoken()
+            }
+            console.log(result)
+          }
+    })
+   
+
+  }
+	    function show() {
+        $.ajax({
+            url:"{:url('goodscate/show')}",
+            success:function (res) {
+                $("#tree").html(res)
+                // $('ul ul').css('display','none')
+               
+            }
+        })
+    }
+    show()
+     $(document).on('click','li' ,function () {
+        pid_html=$(this).html()
+        pid=$(this).attr('value')
+       $('#pid').html(pid_html)
+       $('#pid').attr('value',pid)
+       name=pid_html.split("<")[0]
+       $('#pid').html(name)
+        var a=$(this).next().css('display')
+        if(a=='none'){
+            $(this).next().css('display','block')
+        }else {
+            $(this).next().css('display','none')
+        }
+    })
+     $('#add').click(function() {
+        var brand_name=$('#brand_name').val()
+        var pid=$('#pid').attr('value')
+        var __token__=$('#__token__').val()
+        $.ajax({
+            url:"{:url('goodscate/addaction')}",
+            data:{
+                name:brand_name,
+                pid:pid,
+                __token__:__token__
+            },
+            type:'post',
+            dataType:'json',
+            success:function(result){
+                if (result.status=='ok') {
+                    $('#span').html(result.data)
+                    $('#span').css('color','red')
+                    show()
+                    comtoken()
+                     setTimeout(function(){ 
+                      $('#span').html('')
+                     }, 3000);
+
+                }
+                if (result.status=='error') {
+                    $('#span').html(result.data)
+                    $('#span').css('color','red')
+                    setTimeout(function(){ 
+                      $('#span').html('')
+                     }, 3000);
+                    comtoken()
+                }
+                console.log(result)
+            }
+        })
+    })
+    function my_delete(id,pid){
+     
+      $.ajax({
+        url:"{:url('goodscate/delete')}",
+        data:{
+          id:id,
+          pid:pid
+         
+        },
+        type:'post',
+        dataType:'json',
+        success:function(result){
+          show()
+          comtoken()
+        }
+      })
+    }
+    function comtoken(){
+      $.ajax({
+        url:"{:url('common/commonToken')}",
+        dataType:'json',
+        success:function(result){
+          console.log(result)
+          $("#__token__").val(result.token)
+        }
+      })
+    }
+
+	
+</script>
+
