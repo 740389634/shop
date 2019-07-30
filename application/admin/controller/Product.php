@@ -17,7 +17,7 @@ class Product extends Common
     }
     public function show(){
            $redis = new Redis;
-           $redis->connect('127.0.0.1',6379);
+           $redis->connect('129.211.78.65',6379);
     	 $search=Request::post('search');
            $haxi=$redis->ZREVRANGE ('rank:2018',0,4);
 
