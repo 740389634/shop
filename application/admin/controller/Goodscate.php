@@ -54,14 +54,19 @@ echo "<ul>";
     public function addaction(){
         $pid=Request::post('pid');
         $name=Request::post('name');
-        $data=Request::post('');
-
-      $validate = new \app\admin\validate\Goodscate;
-        if (!$validate->check($data)) {
-           $res=['code'=>'1','status'=>'error','data'=>$validate->getError()];
-            echo json_encode($res);
+        if (empty($name)) {
+             $res=['code'=>'1','status'=>'error','data'=>'不能为空'];
+            echo $json=json_encode($res);
             die;
         }
+      //   $data=Request::post('');
+
+      // $validate = new \app\admin\validate\Goodscate;
+      //   if (!$validate->check($data)) {
+      //      $res=['code'=>'1','status'=>'error','data'=>$validate->getError()];
+      //       echo json_encode($res);
+      //       die;
+      //   }
        $arr= Db::query("select * from goods_cate where brand_name='$name'");
         if (empty($arr)) {
             $data=['brand_name'=>$name,'pid'=>$pid];
@@ -102,14 +107,14 @@ echo "<ul>";
     public function update(){
         $id=Request::post('id');
         $name=Request::post('name');
-      //   $data=Request::post('');
+        $data=Request::post('');
 
-      // $validate = new \app\admin\validate\Goodscate;
-      //   if (!$validate->check($data)) {
-      //      $res=['code'=>'1','status'=>'error','data'=>$validate->getError()];
-      //       echo json_encode($res);
-      //       die;
-      //   }
+      $validate = new \app\admin\validate\Goodscate;
+        if (!$validate->check($data)) {
+           $res=['code'=>'1','status'=>'error','data'=>$validate->getError()];
+            echo json_encode($res);
+            die;
+        }
        $arr= Db::query("select * from goods_cate where id='$id'");
        if (!empty($arr)) {
            $data=['brand_name'=>$name];

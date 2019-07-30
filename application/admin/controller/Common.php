@@ -5,16 +5,26 @@ use think\Controller;
 use think\facade\Session;
 use gmars\rbac\Rbac;
 use Request;
+use Redis;
+use Cache;
 class Common extends Controller
 {
     public function initialize()
     {
+       
+
       $name=Session::get('name');
-      
+       $arr=Cache::get($name);
+            if (!$arr){
+                Cache::set($name,1,3600);
+            }else{
+            Cache::set($name,$arr+1,3600);
+            }
       if (empty($name)) {
        $this->redirect('login/login');
       }else{
       	$this->assign('name',$name);
+        
       }
        $rbac = new Rbac();
       $module=Request::module();
@@ -34,11 +44,13 @@ class Common extends Controller
                     die;
               }
           }
+
       }
      
-      
+    
       
     }
+
     public function commonToken()
     {
         $token = $this->request->token('__token__', 'sha1');

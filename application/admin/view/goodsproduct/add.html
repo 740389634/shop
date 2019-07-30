@@ -1,0 +1,125 @@
+{include file="header"/}
+
+<!--/_header 作为公共模版分离出去-->
+
+<!--_menu 作为公共模版分离出去-->
+
+
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员 <span class="c-gray en">&gt;</span> 权限列表 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+ 	<input  type="text" hidden="" name="__token__" id="__token__" value="{$Request.token}" />
+    
+
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div>
+				<h4>货品</h4>
+				<div>
+					<button onClick="addaction()" type="button" class="btn btn-success" id="add" name="" onClick=""><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+				</div>
+				<br>
+				<div>
+					价格：
+					<input type="text" name="" id="price">
+				</div>
+				<br>
+				<div>
+					库存：
+					<input type="text" name="" id="sn_number">
+				</div>
+			</div>
+				<br>
+				<div class="formControls col-xs-8 col-sm-9">
+					<dl class="permission-list" id="goods_attr_id">
+						
+					</dl>
+			
+				</div>
+			<br>
+			
+		</article>
+	</div>    
+</section>
+
+<!--_footer 作为公共模版分离出去--> 
+{include file="footer"/}
+<script type="text/javascript">
+		function goodsshow(){
+  		var id={$id}
+
+		$.ajax({
+			url:"{:url('goodsproduct/goodsshow')}",
+			data:{
+				id:id
+			},
+			type:'post',
+			dataType:'json',
+			success:function(result){
+
+				if (result.status=='error') {
+					$('#permission-list').html('')
+				}
+				var code=result.code
+				var data=result.data
+				dl=''
+				$.each(data,function( key ,value ){
+					dl=dl+"	<dt><label ><span class='box'  value='"+value[0]['a_id']+"' name='user-Character-0-0' id='user-Character-0-0'>"+key+"</label></dt><dd><select>"
+					$.each(value,function( key1 ,value1 ){
+
+						
+						dl=dl+"	<label class=''><option id='a"+value1['a_id']+"' type='text' class='mycheckbox' value='"+value1['a_id']+"' name='user-Character-0-0-0' id='user-Character-0-0-4'>"+value1['at_name']+"</option></label>"
+					})
+					dl=dl+"</dd></select>";
+					$('#goods_attr_id').html(dl)
+
+				})
+			}
+		})
+	}
+	goodsshow()
+	function addaction(){
+		var id={$id}
+
+		var price=$('#price').val()
+		var __token__ =$('#__token__').val()
+		var sn_number=$('#sn_number').val()
+		var goods_attr_id=$('#goods_attr_id').val()
+		var mycheckbox=$(".mycheckbox:checked")
+		var box=''
+		for (var i = 0; i < mycheckbox.length; i++) {
+			box=box+','+mycheckbox[i].value
+		}	
+		$.ajax({
+			url:"{:url('goodsproduct/addaction')}",
+			data:{
+				id:id,
+				box:box,
+				price:price,
+				sn_number:sn_number,
+				__token__:__token__
+			},
+			type:'post',
+			dataType:'json',
+			success:function(result){
+				comtoken()
+				if (result.status=='ok') {
+					comtoken()
+				}
+				if (result.status=='error') {
+					comtoken()
+					alert(result.data)
+				}
+			}
+		})
+	}
+	function comtoken(){
+      $.ajax({
+        url:"{:url('common/commonToken')}",
+        dataType:'json',
+        success:function(result){
+          console.log(result)
+          $("#__token__").val(result.token)
+        }
+      })
+    }
+</script>

@@ -39,8 +39,4 @@ class Login extends Controller
     	Session::clear();
         $this->redirect('login/login');
     }
-  	public function md5(){
-  		$ar=md5(123);
-  		echo $ar;
-  	}
 }

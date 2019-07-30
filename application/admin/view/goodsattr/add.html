@@ -1,0 +1,149 @@
+{include file="header"/}
+<section class="Hui-article-box">
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 管理员 <span class="c-gray en">&gt;</span> 管理员 <a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+ 
+    
+  <input  type="text" hidden="" name="__token__" id="__token__" value="{$Request.token}" />
+	<div class="Hui-article">
+		<article class="cl pd-20">
+			<div>
+				属性：
+				<select id="g_id" onchange="goodsshow()">
+					<option></option>
+				</select>
+				
+			</div>
+			<!-- <div>
+				商品：
+				<select id="goods_id" onchange="goods()">
+					<option></option>
+				</select>
+				
+			</div> -->
+			
+				<!-- <label class="form-label col-xs-4 col-sm-3">选择属性：</label> -->
+				<div class="formControls col-xs-8 col-sm-9">
+					<dl class="permission-list" id="permission-list">
+						
+					</dl>
+			
+				</div>
+			<div>
+				<form class="Huiform" method="post" action="" target="_self"> 
+					<div>
+						 <button onclick="addaction()"  type="button" class="btn btn-success" ><i class="Hui-iconfont">&#xe600;</i> 添加</button>
+					</div>
+					
+           
+           
+            <span id="span"></span>
+				</form>
+			</div>
+		</article>
+	</div>       
+</section>
+ {include file="footer"/}
+ <script type="text/javascript">
+   function show(){
+   	var id={$id}
+
+    $.ajax({
+      url:"{:url('goodsattr/attrshow')}",
+      data:{
+      	id:id
+      },
+      dataType:'json',
+      success:function(result){
+        
+        var mydefault=result.default
+
+       if (result.status=='ok') {
+        var data=result.data
+
+        var option="<option value='0'>请选择</option>";
+        for (var i = 0; i < data.length; i++) {
+        	
+
+        	if (mydefault==data[i]['id']) {
+        		option=option+"<option  value='"+data[i]['id']+"' selected>"+data[i]['name']+"</option>"
+        	}else{
+        		option=option+"<option  value='"+data[i]['id']+"'>"+data[i]['name']+"</option>"
+        	}
+        	
+        }
+        $("#g_id").html(option);
+        goodsshow()
+       }
+      }
+    });
+  }
+
+  show()
+  	function goodsshow(){
+  		var id={$id}
+
+  		var g_id=$('#g_id').val()
+		$.ajax({
+			url:"{:url('goodsattr/goodsshow')}",
+			data:{
+				g_id:g_id,
+				id:id
+			},
+			type:'post',
+			dataType:'json',
+			success:function(result){
+				if (result.status=='error') {
+					$('#permission-list').html('')
+				}
+				var code=result.code
+				var data=result.data
+				dl=''
+				$.each(data,function( key ,value ){
+					dl=dl+"	<dt><label ><span class='box'  value='"+value[0]['a_id']+"' name='user-Character-0-0' id='user-Character-0-0'>"+key+"</label></dt><dd>"
+					$.each(value,function( key1 ,value1 ){
+
+						
+						dl=dl+"	<label class=''><input id='a"+value1['at_id']+"' type='checkbox' class='mycheckbox' val='"+value1['a_id']+"' value='"+value1['at_id']+"' name='user-Character-0-0-0' id='user-Character-0-0-4'>"+value1['at_name']+"</label>"
+					})
+					dl=dl+"</dd>";
+					$('#permission-list').html(dl)
+
+				})
+					$.each(code,function(key,value){
+					var id=value['attr_details_id']
+					var pid='a'+id
+         			$('#'+pid).prop('checked',true)
+
+				})
+			}
+		})
+	}
+	
+	
+	function addaction(){
+		var id={$id}
+
+		var g_id=$('#g_id').val()
+		var attribute=document.getElementsByName('user-Character-0-0-0')
+		var chk_value =[];//定义一个数组    
+        $('input[name="user-Character-0-0-0"]:checked').each(function(){
+        chk_value.push($(this).val())
+        });
+        $.ajax({
+			url:"{:url('goodsattr/addaction')}",
+			data:{
+				id:id,
+				attribute_id:chk_value,
+				g_id:g_id,
+			},
+			type:'post',
+			dataType:'json',
+			success:function(result){
+
+			}
+		})
+		
+		
+	}
+
+ </script>
