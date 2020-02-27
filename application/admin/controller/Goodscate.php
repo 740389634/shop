@@ -18,8 +18,6 @@ class Goodscate extends Common
 
 echo "<ul>";
         foreach ($arr as $key => $value){
-
-            
             //第一次遍历,找到父节点为根节点的节点 也就是pid=0的节点
             if ($value['pid'] == $pid){
                 //父节点为根节点的节点,级别为0，也就是第一级

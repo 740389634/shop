@@ -144,24 +144,17 @@ class Product extends Common
     	$res=['code'=>'0','status'=>'ok','data'=>'修改成功'];
   		echo $json=json_encode($res);
     }
-       function get($num = 100000)  // $num为生成汉字的数量
-    {
-        //$b = '';
-        for ($i=0; $i<$num; $i++) {
-            // 使用chr()函数拼接双字节汉字，前一个chr()为高位字节，后一个为低位字节
-              $a = chr(mt_rand(0xB0,0xD0)).chr(mt_rand(0xA1, 0xF0));
-              $d = chr(mt_rand(0xB0,0xD0)).chr(mt_rand(0xA1, 0xF0));
-              $c = chr(mt_rand(0xB0,0xD0)).chr(mt_rand(0xA1, 0xF0));
-              $d=$a.$d.$c;
-            // 转码
-             $b= iconv('GB2312', 'UTF-8', $d);
-             "<br>";
-        $add = ['name' => $b,'brand_id'=>43,'goods_id'=>104];
-        $acc=Db::name('goods')->insert($add);
+     // public function test(){
+     //     $arr=[];
+     //     for ($i=0;$i<10000;$i++){
+     //         $num=rand(3, 10);
+     //         $b=$this->getChar($num);
+     //         $arr[]=$b;
+     //     }
+     //     $arr1=implode($arr,"'),('");
+     //     $sql="insert into `goods`(`name`) values('$arr1')";
+     //     Db::query($sql);
+     // }
 
-        }
-        //return $b;
-
-    }
     
 }
