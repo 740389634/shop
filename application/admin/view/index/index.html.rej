@@ -1,0 +1,10 @@
+diff a/application/admin/view/index/index.html b/application/admin/view/index/index.html	(rejected hunks)
+@@ -14,7 +14,7 @@
+             <a href="{:url('index/test')}">下载</a>
+             <br>
+             <input name="excel" id="excel" type="file" class="form-control">
+-            <button onclick="myfile()" class="btn btn-lg btn-primary btn-block"></button>
++            <!-- <button onclick="myfile()" class="btn btn-lg btn-primary btn-block">导入</button> -->
+ {include file="footer"/}
+ <script type="text/javascript">
+     function myfile() {
